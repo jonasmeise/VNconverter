@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 
-public class ONScriptCommandIdentification {
+public class ONScriptCommandIdentification { //all Commands. For a single line in the script, the RegEx finds the fitting command + parameter text
 	public String regexIgnore = "(;;;)";
 	public String regexSound = "(?<=dwave \\d,\")(.*)(?=\")";
 	public String regexPlaybackStop="(stop)";

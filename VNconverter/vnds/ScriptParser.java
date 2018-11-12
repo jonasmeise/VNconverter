@@ -14,8 +14,11 @@ import type.VNDS.*;
 
 public class ScriptParser {
 	
-	private int app_width = 800;
-	private int app_heigth = 600;
+	private int app_width = 800; //actual game size
+	private int app_heigth = 600; //actual game size
+	
+	private int true_app_width = 256; //sprite coordinates have to be downshifted to this resolutioon
+	private int true_app_heigth = 192;
 	
 	private String filePath = "C:\\Users\\Jonas\\Downloads\\KillerQueen\\KillerQueen-en\\script.txt";
 	private String scriptOutputPath = "C:\\Users\\Jonas\\Downloads\\KillerQueen\\2change\\foreground\\script.txt";
@@ -49,8 +52,10 @@ public class ScriptParser {
 				String orientation = command.getParameters().get(1);
 				
 				if(commandName.compareTo("setimg")==0) {
-					//png umbenennen
+					//rename image files to .png
 					command.getParameters().set(0, command.getParameters().get(0).substring(0, command.getParameters().get(0).length()-4) + ".png");
+					
+					//remove sub-folders and merge them into a single /foreground/ folder
 					command.getParameters().set(0, command.getParameters().get(0).replace("system/", "foreground/"));
 					command.getParameters().set(0, command.getParameters().get(0).replace("ld/", "foreground/"));
 				}
@@ -65,34 +70,29 @@ public class ScriptParser {
 				
 				int width          = bimg.getWidth();
 				int heigth         = bimg.getHeight();
+				int new_x_pos = 0, new_y_pos = 0;
 
 				if(orientation.compareTo("c")==0) {
-					int new_x_pos = (app_width / 2) - (width / 2);
-					int new_y_pos = (app_heigth) - (heigth);
-					
-					finalCommand = new SetImg();
-					finalCommand.addParameters(new File(command.getParameters().get(0)).getPath());
-					finalCommand.addParameters("" + Math.round(new_x_pos/3.125));
-					finalCommand.addParameters("" + Math.round(new_y_pos/3.125));
+					new_x_pos = (app_width / 2) - (width / 2);
+					new_y_pos = (app_heigth) - (heigth);
 				} else if(orientation.compareTo("l")==0) {
-					int new_x_pos = 0;
-					int new_y_pos = (app_heigth) - (heigth);
-					
-					finalCommand = new SetImg();
-					finalCommand.addParameters(new File(command.getParameters().get(0)).getPath());
-					finalCommand.addParameters("" + Math.round(new_x_pos/3.125));
-					finalCommand.addParameters("" + Math.round(new_y_pos/3.125));
+					new_x_pos = 0;
+					new_y_pos = (app_heigth) - (heigth);
 				} else if(orientation.compareTo("r")==0) {
-					int new_x_pos = (app_width) - (width);
-					int new_y_pos = (app_heigth) - (heigth);
-					
-					finalCommand = new SetImg();
-					finalCommand.addParameters(new File(command.getParameters().get(0)).getPath());
-					finalCommand.addParameters("" + Math.round(new_x_pos/3.125));
-					finalCommand.addParameters("" + Math.round(new_y_pos/3.125));
+					new_x_pos = (app_width) - (width);
+					new_y_pos = (app_heigth) - (heigth);
+				} else {
+					myLog.log("Unknown sprite format/position: " + orientation + ".");
 				}
+				
+				
+				finalCommand = new SetImg();
+				finalCommand.addParameters(new File(command.getParameters().get(0)).getPath());
+				finalCommand.addParameters("" + Math.round(new_x_pos/(app_width/true_app_width)));
+				finalCommand.addParameters("" + Math.round(new_y_pos/(app_width/true_app_width)));
 			}
 			
+			//remove sub-folder restrictions, VNDS fetches them automatically
 			if(commandName.compareTo("setimg")==0 || commandName.compareTo("bgload")==0 || commandName.compareTo("sound")==0 || commandName.compareTo("music")==0)
 			{
 				//myLog.log(command.outputCommand());
