@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
@@ -85,12 +86,9 @@ public class FileUtil {
 		return readFromFile(filePath.getAbsolutePath());
 	}
 	
-	public OutputStreamWriter createWriter(String path) throws IOException {
-		File fout = new File(path);
-		FileOutputStream fos = new FileOutputStream(fout);
-	 
-		OutputStreamWriter osw = new OutputStreamWriter(fos);
-	 
-		return osw;
+	public FileWriter createWriter(String path) throws IOException {
+		File file = new File(path);
+		FileWriter fr = new FileWriter(file, true);
+		return fr;
 	}
 }

@@ -2,13 +2,8 @@ package extra;
 
 public class ConsoleLog {
 	private boolean active = true;
-	
-	public void log(String message) {
-		String source = getMethodName(3);
-		System.out.println(source + ": " + message);
-	}
-	
-	public void log(int message) {
+
+	public void log(Object message) {
 		String source = getMethodName(3);
 		System.out.println(source + ": " + message);
 	}

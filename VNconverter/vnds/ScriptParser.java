@@ -89,7 +89,7 @@ public class ScriptParser {
 				finalCommand = new SetImg();
 				finalCommand.addParameters(new File(command.getParameters().get(0)).getPath());
 				finalCommand.addParameters("" + Math.round(new_x_pos/(app_width/true_app_width)));
-				finalCommand.addParameters("" + Math.round(new_y_pos/(app_width/true_app_width)));
+				finalCommand.addParameters("" + Math.round(new_y_pos/(app_width/true_app_heigth)));
 			}
 			
 			//remove sub-folder restrictions, VNDS fetches them automatically
